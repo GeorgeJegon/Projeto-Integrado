@@ -20,7 +20,11 @@ Graph.prototype.draw = function (containerElement) {
     width: containerElement.offsetWidth,
     height: containerElement.offsetHeight
   });
+  
+  context.appendChild(createSVGCircle());
+  context.appendChild(createSVGText("George"));
   containerElement.appendChild(context);
+  
 };
 
 function ge (id) {
@@ -42,7 +46,7 @@ function createSVGElement (type, options) {
   options = options || {};
 
   for (var prop in options) {
-    svgElement.setAttributeNS(null ,prop, options[prop]);
+    svgElement.setAttributeNS(null , prop, options[prop]);
   }
 
   return svgElement;
@@ -50,8 +54,8 @@ function createSVGElement (type, options) {
 
 function createSVG (options) {
   options = extend(options, {
-    version: "1.1",
-    baseProfile: "full"
+    "version": "1.1",
+    "baseProfile": "full"
   });
 
   var svg = createSVGElement("svg", options);
@@ -61,17 +65,38 @@ function createSVG (options) {
 
 function createSVGCircle (options) {
   options = extend(options, {
-    cx: 100,
-    cy: 100,
-    r: 50,
-    fill: "black",
-    stroke: "none"
+    "cx": 100,
+    "cy": 100,
+    "r": 30,
+    "fill": "#fff",
+    "stroke": "#000"
   });
 
   return createSVGElement("circle", options);
 }
 
+function createSVGText (value, options) {
+  options = extend(options, {
+    "x": 100,
+    "y": 100,
+    "font-size": 12,
+    "text-anchor": "#fff",
+    "fill": "#000"
+  });
+
+  function createSVGCircleText () {
+    
+  }
+
+  var textNode = document.createTextNode(value),
+    svgText = createSVGElement("text", options);
+
+  svgText.appendChild(textNode);  
+  return svgText;
+}
+
 function extend (destination, source) {
+  destination = destination || {};
   for (var prop in source) {
     destination[prop] = source[prop];
   }
