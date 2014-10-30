@@ -1,0 +1,43 @@
+.grid {
+	width: 602px;
+	height: 602px;
+	margin: 0 auto;
+}
+
+.grid .row {
+
+}
+
+.grid .row:nth-child(2) {
+	border-top: solid 1px #ccc;
+	border-bottom: solid 1px #ccc;
+}
+
+.grid .col {
+	width: 200px;
+	height: 200px;
+	float: left;
+}
+
+.grid .col:nth-child(2) {
+	border-left: solid 1px #ccc;
+	border-right: solid 1px #ccc;
+}
+
+.grid .col.x {
+	background-image: url(../images/x.jpg);
+}
+
+.grid .col.o {
+	background-image: url(../images/bolinha.jpg);
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
