@@ -1,15 +1,25 @@
 function Node (value) {
+  this.parent = undefined;
   this.value = value || 0;
   this.listNodes = [];
-  this.isLeaf = true;
+  this.leaf = true;
 }
 
 Node.prototype.addChild = function (node) {
   if (isInstanceOf(node, Node)) {
+    node.parent = this;
     this.listNodes.push(node);
-    this.isLeaf = false;
+    this.leaf = false;
   }
   return this;
+};
+
+Node.prototype.getParent = function () {
+  return this.parent;
+};
+
+Node.prototype.get = function (index) {
+  return this.listNodes[index];
 };
 
 Node.prototype.removeChild = function (index) {
