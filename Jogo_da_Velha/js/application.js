@@ -29,10 +29,63 @@ window.onload = function () {
   NodeTree.get(2).addChild(new Node(5));
   NodeTree.get(2).addChild(new Node(2));
 
-  //console.log(NodeTree);
-  var test = MiniMaxCalc(NodeTree);
-  console.log(test);
-  console.log(NodeTree);
+  // MiniMaxCalc(NodeTree);
+  // console.log(NodeTree);
+
+
+  var NodeTree2 = new Node(); // Raiz
+
+  // Nivel 1
+  NodeTree2.addChild(new Node());
+  NodeTree2.addChild(new Node());
+
+  // Nivel 2
+  NodeTree2.get(0).addChild(new Node());
+  NodeTree2.get(0).addChild(new Node());
+
+  NodeTree2.get(1).addChild(new Node());
+  NodeTree2.get(1).addChild(new Node());
+
+  // Nivel 3
+  NodeTree2.get(0).get(0).addChild(new Node());
+  NodeTree2.get(0).get(0).addChild(new Node());
+
+  NodeTree2.get(0).get(1).addChild(new Node());
+  NodeTree2.get(0).get(1).addChild(new Node());
+
+  NodeTree2.get(1).get(0).addChild(new Node());
+  NodeTree2.get(1).get(0).addChild(new Node());
+
+  NodeTree2.get(1).get(1).addChild(new Node());
+  NodeTree2.get(1).get(1).addChild(new Node());
+
+  // Nivel 4
+  NodeTree2.get(0).get(0).get(0).addChild(new Node(8));
+  NodeTree2.get(0).get(0).get(0).addChild(new Node(23));
+
+  NodeTree2.get(0).get(0).get(1).addChild(new Node(-47));
+  NodeTree2.get(0).get(0).get(1).addChild(new Node(28));
+
+  NodeTree2.get(0).get(1).get(0).addChild(new Node(-30));
+  NodeTree2.get(0).get(1).get(0).addChild(new Node(-37));
+
+  NodeTree2.get(0).get(1).get(1).addChild(new Node(3));
+  NodeTree2.get(0).get(1).get(1).addChild(new Node(-41));
+
+  NodeTree2.get(1).get(0).get(0).addChild(new Node(-19));
+  NodeTree2.get(1).get(0).get(0).addChild(new Node(4));
+
+  NodeTree2.get(1).get(0).get(1).addChild(new Node(-49));
+  NodeTree2.get(1).get(0).get(1).addChild(new Node(4));
+
+  NodeTree2.get(1).get(1).get(0).addChild(new Node(43));
+  NodeTree2.get(1).get(1).get(0).addChild(new Node(45));
+
+  NodeTree2.get(1).get(1).get(1).addChild(new Node(-26));
+  NodeTree2.get(1).get(1).get(1).addChild(new Node(-14));
+
+  MiniMaxCalc(NodeTree2);
+  console.log(NodeTree2);
 };
 
 function MiniMaxCalc (root, level) {
@@ -55,9 +108,6 @@ function MiniMaxCalc (root, level) {
       miniMaxValue = select(miniMaxValue, MiniMaxCalc(root.listNodes[i], level + 1));
     }
     root.value = miniMaxValue;
-    console.log(miniMaxValue);
-    return miniMaxValue;
-  } else {
-    return root.value;
   }
+  return root.value;
 }
