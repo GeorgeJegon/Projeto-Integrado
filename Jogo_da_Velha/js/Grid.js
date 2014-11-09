@@ -17,7 +17,7 @@ Grid.prototype.setMove = function (field, value) {
 
 Grid.prototype.removeEmptyCell = function (field) {
   var index = this.emptyCells.indexOf(field);
-  this.lastMove = this.emptyCells.splice(index, 1);
+  this.lastMove = this.emptyCells.splice(index, 1)[0];
 };
 
 Grid.prototype.canMove = function (field) {
