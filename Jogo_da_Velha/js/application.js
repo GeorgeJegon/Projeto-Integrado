@@ -6,16 +6,16 @@ function isInstanceOf(obj, objClass) {
 	return obj instanceof objClass;
 }
 
-var GLOBAL;
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 window.onload = function () {
   var NodeTree = new Node("George"); // Raiz
 
-
   NodeTree.addChild(new Node());
   NodeTree.addChild(new Node());
   NodeTree.addChild(new Node());
-
 
   NodeTree.get(0).addChild(new Node(3));
   NodeTree.get(0).addChild(new Node(12));
@@ -29,9 +29,7 @@ window.onload = function () {
   NodeTree.get(2).addChild(new Node(5));
   NodeTree.get(2).addChild(new Node(2));
 
-  // MiniMaxCalc(NodeTree);
-  // console.log(NodeTree);
-
+  //console.log(new MiniMax(NodeTree));
 
   var NodeTree2 = new Node(); // Raiz
 
@@ -84,30 +82,16 @@ window.onload = function () {
   NodeTree2.get(1).get(1).get(1).addChild(new Node(-26));
   NodeTree2.get(1).get(1).get(1).addChild(new Node(-14));
 
-  MiniMaxCalc(NodeTree2);
-  console.log(NodeTree2);
+  //console.log(new MiniMax(NodeTree2));
+
+  // var NodeGridTree = new NodeGrid();
+  //   NodeGridTree.setMove(4, "x");
+  //   NodeGridTree.generateChilds("o");
+  //   console.log(NodeGridTree);
+
+  var testGrid = new Grid();
+  testGrid.setMove(4, "x");
+  testGrid.setMove(1, "o");
+  console.table(testGrid.matriz);
+  console.log(testGrid.calculate());
 };
-
-function MiniMaxCalc (root, level) {
-  level = level || 0;
-
-  var miniMaxValue , select;
-
-  if (!(level%2)) { //Max
-    select = Math.max;
-    miniMaxValue = -Infinity;
-  } else { // Min
-    select = Math.min;
-    miniMaxValue = Infinity;
-  }
-
-  console.log(root.value, "Level: " + level);
-
-  if (!root.isLeaf()) {
-    for (var i = 0, j = root.listNodes.length; i < j; i++) {
-      miniMaxValue = select(miniMaxValue, MiniMaxCalc(root.listNodes[i], level + 1));
-    }
-    root.value = miniMaxValue;
-  }
-  return root.value;
-}
