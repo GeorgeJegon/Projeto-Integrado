@@ -4,6 +4,7 @@ function PlayerMaquina (symbol) {
 }
 
 PlayerMaquina.prototype = new Player();
+PlayerMaquina.prototype.constructor = PlayerMaquina;
 
 PlayerMaquina.prototype.makeMove = function (grid) {
   var field = grid.emptyCells[getRandom(grid.emptyCells.length)];
