@@ -37,7 +37,3 @@ NodeGrid.prototype.generateChilds = function (playerSymbol) {
 		this.addChild(currentNode);
 	}
 };
-
-function clone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
