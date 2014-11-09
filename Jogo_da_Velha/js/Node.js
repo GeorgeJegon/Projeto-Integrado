@@ -8,7 +8,7 @@ function Node (value) {
 Node.prototype.addChild = function (node) {
   if (isInstanceOf(node, Node)) {
     node.parent = this;
-    this.listNodes.push(node);
+    this.listNodes = this.listNodes.slice(0).concat([node]);
     this.leaf = false;
   }
   return this;
