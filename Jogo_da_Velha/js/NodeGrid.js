@@ -23,17 +23,26 @@ NodeGrid.prototype.clone = function () {
 	return newObject;
 };
 
-NodeGrid.prototype.generateChilds = function (playerSymbol) {
-	var i = this.grid.emptyCells.length, 
-		currentNode, 
-		player = new Player("George" , playerSymbol);
+
+var count = 0;
+
+NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
+	var i = this.grid.emptyCells.length, currentNode, win = false, draw = false,
+		currentPlayer = players[currentPlayerIndex], currentValue = 0;
 
 	while (i--) {
 		currentNode = this.clone();
-		currentNode.setMove(currentNode.grid.emptyCells[i], playerSymbol);
-		if (!currentNode.checkWin(player) && !currentNode.grid.checkDraw()) {
-			currentNode.generateChilds((playerSymbol === "o") ? "x" : "o");
+		currentNode.setMove(currentNode.grid.emptyCells[i], currentPlayer.getSymbol());
+		win = currentNode.checkWin(currentPlayer);
+		draw = currentNode.grid.checkDraw();
+		if (!win && !draw) {
+			currentNode.generateChilds(players, swapZeroOrOne(currentPlayerIndex));
+		} else if (win) {
+			currentValue = (currentPlayer.getType() === "Max")? 1 : -1;
+		} else if (draw) {
+			currentValue = 0;
 		}
+		count++;
 		this.addChild(currentNode);
 	}
 };
