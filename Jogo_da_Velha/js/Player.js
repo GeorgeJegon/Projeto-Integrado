@@ -1,6 +1,7 @@
 function Player(name, symbol) {
   this.name = name;
   this.symbol = symbol;
+  this.type = "Min";
 }
 
 Player.prototype.setName = function (name) {
@@ -19,6 +20,15 @@ Player.prototype.setSymbol = function (symbol) {
 
 Player.prototype.getSymbol = function () {
   return this.symbol;
+};
+
+Player.prototype.setType = function (type) {
+	this.type = type;
+	return this;
+};
+
+Player.prototype.getType = function () {
+	return this.type;
 };
 
 Player.prototype.makeMove = function (grid, field) {
