@@ -1,9 +1,19 @@
-function NodeGrid () {
+function NodeGrid() {
   this.grid = new Grid();
+  this.miniMaxValue = null;
 }
 
 NodeGrid.prototype = new Node();
 NodeGrid.prototype.constructor = NodeGrid;
+
+NodeGrid.prototype.setMiniMaxValue = function (value) {
+  this.miniMaxValue = value;
+  return this;
+};
+
+NodeGrid.prototype.getMiniMaxValue = function () {
+  return this.miniMaxValue;
+};
 
 NodeGrid.prototype.setMove = function (field, value) {
 	return this.grid.setMove(field, value);
@@ -28,21 +38,34 @@ var count = 0;
 
 NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
 	var i = this.grid.emptyCells.length, currentNode, win = false, draw = false,
-		currentPlayer = players[currentPlayerIndex], currentValue = 0;
+		currentPlayer = players[currentPlayerIndex], currentValue = 0,
+		nextPlayerIndex = swapZeroOrOne(currentPlayerIndex),
+		nextPlayer = players[nextPlayerIndex], playerWinValue = -1,
+		listPlayers = [currentPlayer];
 
-	while (i--) {
-		currentNode = this.clone();
-		currentNode.setMove(currentNode.grid.emptyCells[i], currentPlayer.getSymbol());
-		win = currentNode.checkWin(currentPlayer);
-		draw = currentNode.grid.checkDraw();
-		if (!win && !draw) {
-			currentNode.generateChilds(players, swapZeroOrOne(currentPlayerIndex));
-		} else if (win) {
-			currentValue = (currentPlayer.getType() === "Max")? 1 : -1;
-		} else if (draw) {
-			currentValue = 0;
+		if (currentPlayer.getType() === "Max") {
+			playerWinValue = 1;
+			listPlayers.push(nextPlayer);
+		} else {
+			listPlayers.unshift(nextPlayer);
 		}
-		count++;
-		this.addChild(currentNode);
-	}
+
+		while (i--) {
+			currentNode = this.clone();
+			currentNode.setMove(currentNode.grid.emptyCells[i], currentPlayer.getSymbol());
+			win = currentNode.checkWin(currentPlayer);
+			draw = currentNode.grid.checkDraw();
+			if (!win && !draw) {
+				currentValue = currentNode.grid.calculate.apply(currentNode.grid,
+					listPlayers);
+				currentNode.generateChilds(players, nextPlayerIndex);
+			} else if (win) {
+				currentValue = playerWinValue;
+			} else if (draw) {
+				currentValue = 0;
+			}
+			count++;
+			currentNode.setMiniMaxValue(currentValue);
+			this.addChild(currentNode);
+		}
 };
