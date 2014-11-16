@@ -9,14 +9,14 @@ Grid.prototype.getFieldValue = function (field) {
   return this.matriz[position.x][position.y];
 };
 
-Grid.prototype.calculate = function () {
-  return this.calculateByPlayer("x") - this.calculateByPlayer("o");
+Grid.prototype.calculate = function (max, min) {
+  return this.calculateByPlayer(max.getSymbol()) - this.calculateByPlayer(min.getSymbol());
 };
 
 Grid.prototype.calculateByPlayer = function (playerSymbol) {
   var winFields = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]],
     gridValue = 0,
-    numberOfZeros = 0
+    numberOfZeros = 0,
     numberOfPlayerSymbol = 0;
 
   for (var i = 0, j = winFields.length; i < j; i++) {
@@ -108,9 +108,4 @@ Grid.prototype.checkWin = function (player) {
 
 Grid.prototype.checkDraw = function () {
   return this.emptyCells.length === 0;
-};
-
-Grid.prototype.avaliate = function (playerSymbol) {
-  playerSymbol = "x";
-
 };
