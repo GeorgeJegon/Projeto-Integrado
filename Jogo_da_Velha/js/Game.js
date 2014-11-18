@@ -13,18 +13,31 @@ Game.prototype.addPlayer = function (player) {
   }
 };
 
+Game.prototype.handlerClickCol = function (DOMfield) {
+  this.handlerHumanPlayerMove(DOMfield);
+};
+
 Game.prototype.initEvents = function () {
-  var self = this, i, j, DOMfield;
-
-  var handlerClickCol = function () {
-    self.handlerHumanPlayerMove(this);
-  };
-
+  var i, j, DOMfield;
   for (i = 0, j = this.canvasGridCols.length; i < j; i++) {
     DOMfield = this.canvasGridCols[i];
     DOMfield.setAttribute("data-position", i);
-    DOMfield.addEventListener("click", handlerClickCol, false);
+    DOMfield.addEventListener("click", this.handlerClickCol.bind(this, DOMfield), false);
   }
+};
+
+Game.prototype.updateNodeTreeGrid = function () {
+  var lastMove = this.grid.lastMove, root = this.nodeGridTree, currentNode = null;
+  if (root && !root.leaf) {
+    for (var i = 0, j = root.listNodes.length; i < j; i++) {
+      currentNode = root.listNodes[i];
+      if (currentNode.grid.lastMove === lastMove) {
+        this.nodeGridTree = currentNode;
+        return true;
+      }
+    }
+  }
+  return false;
 };
 
 Game.prototype.handlerHumanPlayerMove = function (DOMObject) {
@@ -33,6 +46,7 @@ Game.prototype.handlerHumanPlayerMove = function (DOMObject) {
     if (!isInstanceOf(player, PlayerMaquina)) {
       if (player.makeMove(this.grid, +DOMObject.getAttribute("data-position"))) {
         this.drawGrid();
+        this.updateNodeTreeGrid();
         this.switchPlayer();
       }
     }
@@ -71,7 +85,7 @@ Game.prototype.checkWin = function () {
 Game.prototype.checkPlayerMaquina = function () {
   if (isInstanceOf(this.currentPlayer, PlayerMaquina)) {
     if (!this.nodeGridTree) { this.createNodeGridTree(); }
-    if (this.currentPlayer.makeMove(this.grid)) {
+    if (this.currentPlayer.makeMove(this.grid, this)) {
       var self = this;
       this.drawGrid();
       setTimeout(function () {
@@ -84,7 +98,7 @@ Game.prototype.checkPlayerMaquina = function () {
 Game.prototype.start = function () {
   this.canvasGridCols = document.getElementsByClassName("col");
   this.initEvents();
-  this.currentPlayerIndex = 0; //getRandom(2);
+  this.currentPlayerIndex = 0;
   this.currentPlayer = this.players[this.currentPlayerIndex];
   this.currentPlayer.setType("Max");
   this.checkPlayerMaquina();
@@ -92,8 +106,10 @@ Game.prototype.start = function () {
 
 Game.prototype.createNodeGridTree = function () {
   var root = new NodeGrid();
-  // root.setMove(4, this.currentPlayer.getSymbol());
-  root.generateChilds(this.players.slice(0), swapZeroOrOne(this.currentPlayerIndex));
+  if (this.grid.lastMove !== -1) {
+    root.setMove(this.grid.lastMove, this.players[swapZeroOrOne(this.currentPlayerIndex)].getSymbol());
+  }
+  root.generateChilds(this.players.slice(0), this.currentPlayerIndex);
   this.nodeGridTree = root;
 };
 
