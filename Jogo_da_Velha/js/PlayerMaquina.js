@@ -39,18 +39,17 @@ PlayerMaquina.prototype.chooseBetterMove = function (grid, gameController) {
       type = this.getType();
     for (var i = 1, j = nodeTreeRoot.listNodes.length; i < j; i++) {
       currentNode = nodeTreeRoot.get(i);
-      // console.log(currentNode.miniMaxValue);
-      // console.table(currentNode.grid.matriz);
+      if (currentNode.leaf && currentNode.miniMaxValue === 1) {
+        gameController.nodeGridTree = nodeTreeRoot.get(i);
+        return grid.setMove(currentNode.grid.lastMove, this.getSymbol());
+      }
       if ((type === "Max" && currentNode.miniMaxValue > maxGrid.miniMaxValue) ||
          (type === "Min" && currentNode.miniMaxValue < maxGrid.miniMaxValue)) {
         maxGrid = currentNode;
         maxCounter = i;
       }
     }
-    console.log(maxGrid.grid.lastMove);
     gameController.nodeGridTree = nodeTreeRoot.get(maxCounter);
     return grid.setMove(maxGrid.grid.lastMove, this.getSymbol());
-  } else {
-    console.log("Opa");
   }
 };
