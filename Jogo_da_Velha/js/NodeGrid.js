@@ -30,15 +30,11 @@ NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
 	var i = this.grid.emptyCells.length, currentNode, win = false, draw = false,
 		currentPlayer = players[currentPlayerIndex], currentValue = 0,
 		nextPlayerIndex = swapZeroOrOne(currentPlayerIndex),
-		nextPlayer = players[nextPlayerIndex], playerWinValue = -1,
-		listPlayers = [currentPlayer],
+		playerWinValue = -1,
 		numberOfEmptyCells = i;
 
 		if (currentPlayer.getType() === "Max") {
 			playerWinValue = 1;
-			listPlayers.push(nextPlayer);
-		} else {
-			listPlayers.unshift(nextPlayer);
 		}
 
 		while (i--) {
