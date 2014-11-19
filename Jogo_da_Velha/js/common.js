@@ -68,6 +68,17 @@ function createGridElement (nodeGrid) {
   return itemElement;
 }
 
+function createJSONfromTree (root, targetObject) {
+  targetObject["minimax"] = root.getValue();
+  if (!root.leaf) {
+    targetObject["childs"] = [];
+    for (var i = 0, j = root.listNodes.length; i < j; i++) {
+      targetObject["childs"].push({});
+      createJSONfromTree(root.get(i), targetObject["childs"][i]);
+    }
+  }
+}
+
 function hasClass(ele,cls) {
   return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 }
