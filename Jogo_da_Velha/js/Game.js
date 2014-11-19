@@ -11,6 +11,7 @@ Game.prototype.addPlayer = function (player) {
   if (isInstanceOf(player, Player)) {
     this.players.push(player);
   }
+  return this;
 };
 
 Game.prototype.handlerClickCol = function (DOMfield) {
