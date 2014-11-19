@@ -11,6 +11,7 @@ Game.prototype.addPlayer = function (player) {
   if (isInstanceOf(player, Player)) {
     this.players.push(player);
   }
+  return this;
 };
 
 Game.prototype.handlerClickCol = function (DOMfield) {
@@ -46,7 +47,6 @@ Game.prototype.handlerHumanPlayerMove = function (DOMObject) {
     if (!isInstanceOf(player, PlayerMaquina)) {
       if (player.makeMove(this.grid, +DOMObject.getAttribute("data-position"))) {
         this.drawGrid();
-        this.updateNodeTreeGrid();
         this.switchPlayer();
       }
     }
@@ -66,6 +66,7 @@ Game.prototype.drawGrid = function () {
 };
 
 Game.prototype.switchPlayer = function () {
+  this.updateNodeTreeGrid();
   if (!this.checkWin()) {
     this.currentPlayerIndex = swapZeroOrOne(this.currentPlayerIndex);
     this.currentPlayer = this.players[this.currentPlayerIndex];
@@ -85,32 +86,34 @@ Game.prototype.checkWin = function () {
 Game.prototype.checkPlayerMaquina = function () {
   if (isInstanceOf(this.currentPlayer, PlayerMaquina)) {
     if (!this.nodeGridTree) { this.createNodeGridTree(); }
-    if (this.currentPlayer.makeMove(this.grid, this)) {
+    if (this.currentPlayer.makeMove(this.grid, this.nodeGridTree)) {
       var self = this;
       this.drawGrid();
       setTimeout(function () {
         self.switchPlayer();
+        createChildNodesDebug(self.nodeGridTree.getParent());
       }, 200);
     }
   }
 };
 
 Game.prototype.start = function () {
-  this.canvasGridCols = document.getElementsByClassName("col");
+  this.canvasGridCols = document.getElementById("GameGrid").getElementsByClassName("col");
   this.initEvents();
   this.currentPlayerIndex = 0;
   this.currentPlayer = this.players[this.currentPlayerIndex];
-  this.currentPlayer.setType("Max");
+  //this.currentPlayer.setType("Max");
   this.checkPlayerMaquina();
 };
 
 Game.prototype.createNodeGridTree = function () {
-  var root = new NodeGrid();
+  var root = new NodeGrid(), MiniMaxTree;
   if (this.grid.lastMove !== -1) {
     root.setMove(this.grid.lastMove, this.players[swapZeroOrOne(this.currentPlayerIndex)].getSymbol());
   }
   root.generateChilds(this.players.slice(0), this.currentPlayerIndex);
-  this.nodeGridTree = root;
+  MiniMaxTree = new MiniMax(root);
+  this.nodeGridTree = MiniMaxTree.root;
 };
 
 Game.prototype.swapPlayer = function () {
