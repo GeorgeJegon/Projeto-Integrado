@@ -37,3 +37,7 @@ Node.prototype.isLeaf = function () {
 Node.prototype.setValue = function (value) {
   this.value = value;
 };
+
+Node.prototype.getValue = function () {
+  return this.value;
+};
