@@ -19,7 +19,7 @@ MiniMax.prototype.calculate = function (root, level) {
     for (var i = 0, j = root.listNodes.length; i < j; i++) {
       miniMaxValue = select(miniMaxValue, this.calculate(root.listNodes[i], level + 1));
     }
-    root.value = miniMaxValue;
+    root.setValue(miniMaxValue);
   }
-  return root.value;
+  return root.getValue();
 };

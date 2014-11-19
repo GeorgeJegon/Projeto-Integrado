@@ -1,19 +1,9 @@
 function NodeGrid() {
   this.grid = new Grid();
-  this.miniMaxValue = null;
 }
 
 NodeGrid.prototype = new Node();
 NodeGrid.prototype.constructor = NodeGrid;
-
-NodeGrid.prototype.setMiniMaxValue = function (value) {
-  this.miniMaxValue = value;
-  return this;
-};
-
-NodeGrid.prototype.getMiniMaxValue = function () {
-  return this.miniMaxValue;
-};
 
 NodeGrid.prototype.setMove = function (field, value) {
 	return this.grid.setMove(field, value);
@@ -41,7 +31,8 @@ NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
 		currentPlayer = players[currentPlayerIndex], currentValue = 0,
 		nextPlayerIndex = swapZeroOrOne(currentPlayerIndex),
 		nextPlayer = players[nextPlayerIndex], playerWinValue = -1,
-		listPlayers = [currentPlayer];
+		listPlayers = [currentPlayer],
+		numberOfEmptyCells = i;
 
 		if (currentPlayer.getType() === "Max") {
 			playerWinValue = 1;
@@ -56,8 +47,7 @@ NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
 			win = currentNode.checkWin(currentPlayer);
 			draw = currentNode.grid.checkDraw();
 			if (!win && !draw) {
-				currentValue = currentNode.grid.calculate.apply(currentNode.grid,
-					listPlayers);
+				currentValue = 0;
 				currentNode.generateChilds(players, nextPlayerIndex);
 			} else if (win) {
 				currentValue = playerWinValue;
@@ -65,7 +55,7 @@ NodeGrid.prototype.generateChilds = function (players, currentPlayerIndex) {
 				currentValue = 0;
 			}
 			count++;
-			currentNode.setMiniMaxValue(currentValue);
+			currentNode.setValue(currentValue * (numberOfEmptyCells));
 			this.addChild(currentNode);
 		}
 };
