@@ -7,10 +7,10 @@ function PlayerMaquina (symbol) {
 PlayerMaquina.prototype = new Player();
 PlayerMaquina.prototype.constructor = PlayerMaquina;
 
-PlayerMaquina.prototype.makeMove = function (grid, gameController) {
+PlayerMaquina.prototype.makeMove = function (grid, nodeTreeRoot) {
   var newGrid;
   if (this.useIA) {
-    newGrid = this.chooseBetterMove(grid, gameController);
+    newGrid = this.chooseBetterMove(grid, nodeTreeRoot);
   } else {
     newGrid = this.randomMove(grid);
   }
@@ -32,24 +32,27 @@ PlayerMaquina.prototype.disableIA = function () {
   return this;
 };
 
-PlayerMaquina.prototype.chooseBetterMove = function (grid, gameController) {
-  var nodeTreeRoot = gameController.nodeGridTree;
+PlayerMaquina.prototype.chooseBetterMove = function (grid, nodeTreeRoot) {
   if (!nodeTreeRoot.leaf) {
-    var currentNode =  null, maxGrid = nodeTreeRoot.get(0), maxCounter = 0,
-      type = this.getType();
+    var currentNode =  null, max = nodeTreeRoot.get(0).getValue(),
+      type = this.getType(), maxPossibilities = [], selectedGrid;
+
     for (var i = 1, j = nodeTreeRoot.listNodes.length; i < j; i++) {
       currentNode = nodeTreeRoot.get(i);
-      if (currentNode.leaf && currentNode.miniMaxValue === 1) {
-        gameController.nodeGridTree = nodeTreeRoot.get(i);
-        return grid.setMove(currentNode.grid.lastMove, this.getSymbol());
-      }
-      if ((type === "Max" && currentNode.miniMaxValue > maxGrid.miniMaxValue) ||
-         (type === "Min" && currentNode.miniMaxValue < maxGrid.miniMaxValue)) {
-        maxGrid = currentNode;
-        maxCounter = i;
+      if ((type === "Max" && currentNode.getValue() > max) ||
+         (type === "Min" && currentNode.getValue() < max)) {
+        max = currentNode.getValue();
       }
     }
-    gameController.nodeGridTree = nodeTreeRoot.get(maxCounter);
-    return grid.setMove(maxGrid.grid.lastMove, this.getSymbol());
+
+    for (i = 0, j = nodeTreeRoot.listNodes.length; i < j; i++) {
+      currentNode = nodeTreeRoot.get(i);
+      if (max === currentNode.getValue()) {
+        maxPossibilities.push(currentNode);
+      }
+    }
+
+    selectedGrid = maxPossibilities[getRandom(maxPossibilities.length)];
+    return grid.setMove(selectedGrid.grid.lastMove, this.getSymbol());
   }
 };
