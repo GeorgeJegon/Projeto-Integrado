@@ -2,7 +2,7 @@ var GLOBAL;
 window.onload = function () {
   var op = 0, listPlayers = [];
   do {
-    op = prompt("Escolha o modo de Jogo:\n1 - Homem x Homem\n2 - Homem x Máquina\n3 - Homem x Máquina (IA)\n4 - Cancelar");
+    op = prompt("Escolha o modo de Jogo:\n1 - Humano x Humano\n2 - Humano x Máquina\n3 - Humano x Máquina (IA)\n4 - Cancelar");
     switch(op) {
       case "1":
         listPlayers.push(new Player(prompt("Digite seu Nome:"), "x"));
